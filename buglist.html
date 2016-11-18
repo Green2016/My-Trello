@@ -1,0 +1,119 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://trello.com/power-ups/power-up.css">
+	<link rel="stylesheet" href="./css/overlay.css">
+	<!--<link rel="stylesheet" href="./css/bootstrap.min.css">-->
+	<script src="https://trello.com/power-ups/power-up.min.js"></script>
+	<style>
+		.popClose{
+			float: right;
+			right:10px;
+			top: -40px;
+			text-decoration: none;
+			position: relative;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="content">
+		<h2 class="pTitle"></h2>
+		<a href="javascript:void(0);" class="popClose">X</a>
+		<hr/>
+		<div class="bs-example">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>BugId</th>
+						<th>Title</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Mark</td>
+
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Jacob</td>
+
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Larry the Bird</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>Mark</td>
+
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Jacob</td>
+
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Larry the Bird</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>Mark</td>
+
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Jacob</td>
+
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Larry the Bird</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script src="./js/overlay.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
+	<script>
+
+		var renderTr = function(data){
+			return "<tr><td>"+data.id+"</td><td><a href='http://172.16.135.55/bugfree/index.php/bug/"+data.id+"' target='_blank'>"+data.Title+"</a></td></tr>";
+		}
+		var renderList = function(data){
+			var arr = data.map(function(item,index){
+				return renderTr(item);
+			});
+			var html = arr.join('');
+			$(".bs-example .table tbody").html(html);
+		}
+		$(document).ready(function(){
+			var t = TrelloPowerUp.iframe();
+			$(".popClose").bind("click",function(){
+				$("body").click();
+			});
+
+			var _name = localStorage.getItem("project_name");
+			var _id = localStorage.getItem("project_id");
+			var _count = localStorage.getItem("total_count");
+
+			$(".pTitle").text(_name);
+			$.ajax({
+				url:'https://www.jirui.me:8089/api/'+_id,
+				type:'GET',
+				dataType:'json',
+				success:function(data){
+					renderList(data);
+				},error:function(err){
+					console.log(err);
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>
